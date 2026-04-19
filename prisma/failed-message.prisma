@@ -1,0 +1,19 @@
+model FailedMessage {
+id            String    @id @default(uuid())
+businessId    String
+contactId     String?
+type          String    // whatsapp, email, sms
+content       String    @db.Text
+metadata      Json?     // Additional data like phone, email, error details
+status        String    @default("pending") // pending, processing, completed, failed
+scheduledFor  DateTime  @default(now())
+processedAt   DateTime?
+attempts      Int       @default(0)
+maxAttempts   Int       @default(3)
+error         String?   @db.Text
+createdAt     DateTime  @default(now())
+updatedAt     DateTime  @updatedAt
+
+@@index([businessId, status])
+@@index([scheduledFor, status])
+}

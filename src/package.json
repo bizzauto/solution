@@ -1,0 +1,9 @@
+{
+  "name": "indiacrm-src",
+  "version": "1.0.0",
+  "description": "IndiaCRM TypeScript source - rebuild this directory from dist if needed",
+  "main": "index.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.server.json"
+  }
+}

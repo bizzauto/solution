@@ -1,0 +1,17 @@
+// Add to your Prisma schema.prisma file
+// Run: npx prisma db push && npx prisma generate
+
+model Backup {
+  id            String    @id @default(uuid())
+  businessId    String
+  data          String    // Encrypted JSON backup
+  checksum      String    // SHA256 hash for integrity verification
+  size          Int       // Size in bytes
+  status        String    @default("pending") // pending, completed, failed
+  createdAt     DateTime  @default(now())
+  lastRestoredAt DateTime?
+  restoreCount  Int       @default(0)
+
+  @@index([businessId])
+  @@index([businessId, createdAt])
+}

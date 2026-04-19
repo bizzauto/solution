@@ -1,0 +1,18 @@
+[Unit]
+Description=IndiaCRM API Server
+After=network.target postgresql.service redis.service
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/indiacrm
+Environment=NODE_ENV=production
+ExecStart=/usr/bin/node dist/server/index.js
+Restart=always
+RestartSec=10
+StandardOutput=append:/var/log/indiacrm/access.log
+StandardError=append:/var/log/indiacrm/error.log
+
+[Install]
+WantedBy=multi-user.target
