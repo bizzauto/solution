@@ -6,111 +6,111 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 model User {
-  id            String    @id @default(uuid())
-  email         String    @unique
-  password      String?
-  googleId      String?   @unique
-  name          String?
-  phone         String?
-  avatar        String?
-  role          String    @default("OWNER")
-  isActive      Boolean   @default(true)
-  businessId    String?
-  business      Business? @relation(fields: [businessId], references: [id])
-  lastLoginAt   DateTime?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id         String    @id @default(uuid())
+  email      String    @unique
+  password   String?
+  googleId   String?   @unique
+  name       String?
+  phone      String?
+  avatar     String?
+  role       String    @default("OWNER")
+  isActive   Boolean   @default(true)
+  businessId String?
+  business   Business? @relation(fields: [businessId], references: [id])
+  lastLoginAt DateTime?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
   @@index([email])
   @@index([businessId])
 }
 model Business {
-  id            String    @id @default(uuid())
-  name          String
-  type          String?
-  phone         String?
-  email         String?
-  city          String?
-  state         String?
-  country       String?
-  address       String?
-  plan          String    @default("FREE")
-  planStartedAt DateTime  @default(now())
-  planExpiresAt DateTime?
-  totalContacts Int       @default(0)
-  totalMessages Int       @default(0)
-  aiCreditsUsed Int       @default(0)
-  aiCreditsLimit Int      @default(100)
-  autoReplyMessage String?
-  waPhoneNumberId String?
-  waAccessToken   String?
-  waWebhookSecret String?
-  gmailAccessToken String?
-  gmailRefreshToken String?
-  gmailTokenExpiry DateTime?
-  users         User[]
-  contacts      Contact[]
-  messages      Message[]
-  campaigns     Campaign[]
-  leads         Lead[]
-  activities    Activity[]
-  automations   Automation[]
-  tags          Tag[]
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id                 String   @id @default(uuid())
+  name               String
+  type               String?
+  phone              String?
+  email              String?
+  city               String?
+  state              String?
+  country            String?
+  address            String?
+  plan               String   @default("FREE")
+  planStartedAt      DateTime @default(now())
+  planExpiresAt      DateTime?
+  totalContacts      Int      @default(0)
+  totalMessages      Int      @default(0)
+  aiCreditsUsed      Int      @default(0)
+  aiCreditsLimit     Int      @default(100)
+  autoReplyMessage   String?
+  waPhoneNumberId    String?
+  waAccessToken      String?
+  waWebhookSecret    String?
+  gmailAccessToken   String?
+  gmailRefreshToken  String?
+  gmailTokenExpiry   DateTime?
+  users              User[]
+  contacts           Contact[]
+  messages           Message[]
+  campaigns          Campaign[]
+  leads              Lead[]
+  activities         Activity[]
+  automations        Automation[]
+  tags               Tag[]
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
   @@index([plan])
 }
 model Contact {
-  id            String    @id @default(uuid())
-  name          String?
-  email         String?
-  phone         String?
-  city          String?
-  state         String?
-  company       String?
-  source        String?
-  tags          Tag[]
-  businessId    String
-  business      Business  @relation(fields: [businessId], references: [id])
-  messages      Message[]
-  activities    Activity[]
-  dealValue     Float?
-  lastActivity  DateTime?
-  whatsappOptIn Boolean   @default(false)
-  metadata      Json?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id             String     @id @default(uuid())
+  name           String?
+  email          String?
+  phone          String?
+  city           String?
+  state          String?
+  company        String?
+  source         String?
+  tags           Tag[]
+  businessId     String
+  business       Business   @relation(fields: [businessId], references: [id])
+  messages       Message[]
+  activities     Activity[]
+  dealValue      Float?
+  lastActivity   DateTime?
+  whatsappOptIn  Boolean    @default(false)
+  metadata       Json?
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
   @@index([businessId])
   @@index([phone])
   @@index([lastActivity])
 }
 model Tag {
-  id        String    @id @default(uuid())
-  name      String
-  color     String?
+  id         String   @id @default(uuid())
+  name       String
+  color      String?
   businessId String
-  business  Business  @relation(fields: [businessId], references: [id])
-  contacts  Contact[]
-  createdAt DateTime  @default(now())
+  business   Business @relation(fields: [businessId], references: [id])
+  contacts   Contact[]
+  createdAt  DateTime @default(now())
   @@unique([name, businessId])
 }
 model Message {
-  id            String    @id @default(uuid())
-  businessId    String
-  business      Business  @relation(fields: [businessId], references: [id])
-  contactId     String
-  contact       Contact   @relation(fields: [contactId], references: [id])
-  direction     String
-  type          String
-  content       String?
-  mediaUrl      String?
-  status        String    @default("sent")
-  waMessageId   String?
-  templateName  String?
-  templateLanguage String?
-  statusTimestamp DateTime?
-  campaignId    String?
-  campaign      Campaign? @relation(fields: [campaignId], references: [id])
-  createdAt     DateTime  @default(now())
+  id                String    @id @default(uuid())
+  businessId        String
+  business          Business  @relation(fields: [businessId], references: [id])
+  contactId         String
+  contact           Contact   @relation(fields: [contactId], references: [id])
+  direction         String
+  type              String
+  content           String?
+  mediaUrl          String?
+  status            String    @default("sent")
+  waMessageId       String?
+  templateName      String?
+  templateLanguage  String?
+  statusTimestamp   DateTime?
+  campaignId        String?
+  campaign          Campaign? @relation(fields: [campaignId], references: [id])
+  createdAt         DateTime  @default(now())
   @@index([businessId, createdAt])
   @@index([contactId])
 }
@@ -123,7 +123,7 @@ model Campaign {
   business      Business  @relation(fields: [businessId], references: [id])
   templateName  String?
   templateVars  Json?
-  targetTags    String[]
+  targetTags    Json?
   scheduledAt   DateTime?
   messages      Message[]
   createdAt     DateTime  @default(now())
@@ -131,30 +131,30 @@ model Campaign {
   @@index([businessId])
 }
 model Activity {
-  id          String    @id @default(uuid())
-  type        String
-  title       String
-  content     String?
-  metadata    Json?
-  businessId  String
-  business    Business  @relation(fields: [businessId], references: [id])
-  contactId   String?
-  contact     Contact?  @relation(fields: [contactId], references: [id])
-  createdAt   DateTime  @default(now())
+  id         String    @id @default(uuid())
+  type       String
+  title      String
+  content    String?
+  metadata   Json?
+  businessId String
+  business   Business  @relation(fields: [businessId], references: [id])
+  contactId  String?
+  contact    Contact?  @relation(fields: [contactId], references: [id])
+  createdAt  DateTime  @default(now())
   @@index([businessId, createdAt])
 }
 model Automation {
-  id          String    @id @default(uuid())
-  name        String
-  trigger     String
-  conditions  Json?
-  actions     Json
-  isActive    Boolean   @default(true)
-  businessId  String
-  business    Business  @relation(fields: [businessId], references: [id])
+  id           String    @id @default(uuid())
+  name         String
+  trigger      String
+  conditions   Json?
+  actions      Json
+  isActive     Boolean   @default(true)
+  businessId   String
+  business     Business  @relation(fields: [businessId], references: [id])
   lastTriggered DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
   @@index([businessId])
 }
 model Lead {
@@ -175,64 +175,64 @@ model Lead {
   @@index([businessId])
 }
 model ScheduledMessage {
-  id              String    @id @default(uuid())
-  businessId      String
-  contactId       String?
-  phone           String
-  type            String    @default("text")
-  content         String?
-  mediaUrl        String?
-  mediaType       String?
-  templateName    String?
-  templateVars    Json?
+  id               String    @id @default(uuid())
+  businessId       String
+  contactId        String?
+  phone            String
+  type             String    @default("text")
+  content          String?
+  mediaUrl         String?
+  mediaType        String?
+  templateName     String?
+  templateVars     Json?
   templateLanguage String?
-  scheduledAt     DateTime
-  timezone        String    @default("Asia/Kolkata")
-  status          String    @default("pending")
-  sentAt          DateTime?
-  error           String?
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
+  scheduledAt      DateTime
+  timezone         String    @default("Asia/Kolkata")
+  status           String    @default("pending")
+  sentAt           DateTime?
+  error            String?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
   @@index([businessId, scheduledAt])
 }
 model LeadScore {
-  id              String    @id @default(uuid())
-  contactId       String    @unique
-  score           Int       @default(0)
-  category        String?
-  recencyScore    Int       @default(0)
-  engagementScore Int       @default(0)
-  intentScore     Int       @default(0)
-  fitScore        Int       @default(0)
-  aiModel         String?
-  aiConfidence    Float?
-  churnRisk       Int       @default(0)
-  predictedValue  Float?
-  reasons         Json?
-  lastScoredAt    DateTime  @default(now())
+  id               String    @id @default(uuid())
+  contactId        String    @unique
+  score            Int       @default(0)
+  category         String?
+  recencyScore     Int       @default(0)
+  engagementScore  Int       @default(0)
+  intentScore      Int       @default(0)
+  fitScore         Int       @default(0)
+  aiModel          String?
+  aiConfidence     Float?
+  churnRisk        Int       @default(0)
+  predictedValue   Float?
+  reasons          Json?
+  lastScoredAt     DateTime  @default(now())
   @@index([contactId])
 }
 model Notification {
-  id          String    @id @default(uuid())
-  type        String
-  title       String
-  message     String?
-  isRead      Boolean   @default(false)
-  businessId  String
-  metadata    Json?
-  createdAt   DateTime  @default(now())
+  id         String    @id @default(uuid())
+  type       String
+  title      String
+  message    String?
+  isRead     Boolean   @default(false)
+  businessId String
+  metadata   Json?
+  createdAt  DateTime  @default(now())
   @@index([businessId, isRead])
 }
 model Backup {
-  id            String    @id @default(uuid())
-  businessId    String
-  data          String
-  checksum      String
-  size          Int
-  status        String    @default("pending")
-  createdAt     DateTime  @default(now())
+  id             String    @id @default(uuid())
+  businessId     String
+  data           String
+  checksum       String
+  size           Int
+  status         String    @default("pending")
+  createdAt      DateTime  @default(now())
   lastRestoredAt DateTime?
-  restoreCount  Int       @default(0)
+  restoreCount   Int       @default(0)
   @@index([businessId])
 }
 model FailedMessage {
